@@ -16,14 +16,14 @@ struct SearchView: View {
         NavigationStack {
             List {
                 MediaSectionView(title: "Movies", media: movies)
-                    .navigationTitle("Movies")
                 MediaSectionView(title: "TV Shows", media: tvShows)
-                    .navigationTitle("TV Shows")
+
             }
             .navigationTitle("Search")
+            .toolbarTitleDisplayMode(.inlineLarge)
+            .listStyle(.plain)
         }
-        .listStyle(.plain)
-        .searchable(text: $searchText, prompt: "Title")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
         .onChange(of: searchText) { oldValue, newValue in
 
             if !newValue.isEmpty {
@@ -60,25 +60,31 @@ struct MediaSectionView: View {
 
     var body: some View {
         if !media.isEmpty {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 10) {
                 Text(title)
-                    .font(.headline)
-                    .foregroundColor(.secondary)
+                    .font(.title2)
+                    .bold()
                 
-                ScrollView(.horizontal) {
-                    HStack {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack() {
                         ForEach(media) { mediaItem in
                             NavigationLink(destination: MediaDetailView(mediaItem: mediaItem)) {
                                 if let imageUrl = mediaItem.posterURL {
-                                    
                                     AsyncImage(url: imageUrl) { image in
                                         image.resizable()
                                     } placeholder: {
-                                        Color.gray.frame(width: 100, height: 150)
+                                        Color
+                                            .secondary
+                                            .frame(width: 100, height: 150)
+                                            .cornerRadius(8)
                                     }
                                     .frame(width: 100, height: 150)
                                     .cornerRadius(8)
-                                    
+                                } else {
+                                    Color
+                                        .secondary
+                                        .frame(width: 100, height: 150)
+                                        .cornerRadius(8)
                                 }
                             }
                         }

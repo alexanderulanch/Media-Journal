@@ -48,37 +48,24 @@ class APIManager {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         
-        // Printing the full request for debugging
-        print("Request: \(request)")
-        print("Headers: \(headers)")
-        
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
-                print("Received error: \(error)")
                 completion(nil, error)
                 return
             }
             
             guard let data = data else {
                 let noDataError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid data"])
-                print("No data received from server.")
                 completion(nil, noDataError)
                 return
-            }
-            
-            // Printing the received data as a string for debugging
-            if let receivedDataString = String(data: data, encoding: .utf8) {
-                print("Received data: \(receivedDataString)")
             }
             
             do {
                 let decoder = JSONDecoder()
                 let searchResponse = try decoder.decode(SearchResponse.self, from: data)
-                print("Decoded response: \(searchResponse)")
                 completion(searchResponse.results, nil)
             } catch let decodeError {
-                print("Error decoding response: \(decodeError)")
                 completion(nil, decodeError)
             }
         }
