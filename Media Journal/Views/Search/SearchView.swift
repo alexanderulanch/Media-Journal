@@ -15,9 +15,12 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             List {
-                MediaSectionView(title: "Movies", media: movies)
-                MediaSectionView(title: "TV Shows", media: tvShows)
-
+                Group {
+                    MediaSectionView(title: "Movies", media: movies)
+                    MediaSectionView(title: "TV Shows", media: tvShows)
+                }
+                .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                .listRowSeparator(.hidden)
             }
             .navigationTitle("Search")
             .toolbarTitleDisplayMode(.inlineLarge)
@@ -25,7 +28,7 @@ struct SearchView: View {
         }
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
         .onChange(of: searchText) { oldValue, newValue in
-
+            
             if !newValue.isEmpty {
                 fetchMedia(mediaType: .movie)
                 fetchMedia(mediaType: .tv)
@@ -57,12 +60,12 @@ struct SearchView: View {
 struct MediaSectionView: View {
     var title: String
     var media: [Media]
-
+    
     var body: some View {
         if !media.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 Text(title)
-                    .font(.title2)
+                    .font(.title3)
                     .bold()
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -91,6 +94,7 @@ struct MediaSectionView: View {
                     }
                 }
             }
+            .safeAreaPadding(.horizontal)
         }
     }
 }
