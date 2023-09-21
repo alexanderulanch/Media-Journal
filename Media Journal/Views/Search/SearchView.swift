@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State private var movies: [Media] = []
-    @State private var tvShows: [Media] = []
-    @State private var searchText: String = ""
+    @State private var movieResults: [Movie] = []
+    @State private var tvShowResults: [TV] = []
+    @State private var query: String = ""
+    
+    let api = APIManager.shared
     
     var body: some View {
         NavigationStack {
             List {
                 Group {
-                    MediaSectionView(title: "Movies", media: movies)
-                    MediaSectionView(title: "TV Shows", media: tvShows)
+                    ResultsScrollView(title: "Movies", results: movieResults)
+//                    ResultsScrollView(title: "TV Shows", results: movieResults)
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                 .listRowSeparator(.hidden)
@@ -26,43 +28,48 @@ struct SearchView: View {
             .toolbarTitleDisplayMode(.inlineLarge)
             .listStyle(.plain)
         }
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
-        .onChange(of: searchText) { oldValue, newValue in
-            
-            if !newValue.isEmpty {
-                fetchMedia(mediaType: .movie)
-                fetchMedia(mediaType: .tv)
-            } else {
-                movies = []
-                tvShows = []
-            }
+        .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
+        .onChange(of: query) { oldValue, newValue in
+                if !newValue.isEmpty {
+                    populateResults(searchType: .movie)
+                    populateResults(searchType: .tvShow)
+                } else {
+                    movieResults = []
+                    tvShowResults = []
+                }
         }
     }
     
-    func fetchMedia(mediaType: MediaType) {
-        APIManager.shared.searchMedia(searchText, mediaType: mediaType) { fetchedMediaItems, error in
-            if let fetchedMediaItems = fetchedMediaItems {
-                switch mediaType {
-                case .movie:
-                    self.movies = fetchedMediaItems
-                case .tv:
-                    self.tvShows = fetchedMediaItems
-                case .person:
-                    return
+    private func populateResults(searchType: SearchType) {
+        switch searchType {
+        case .movie:
+            api.searchMovie(query) { result, error in
+                if let result = result {
+                    movieResults = result.results
+                } else if let error = error {
+                    print("Error searching movies: \(error.localizedDescription)")
                 }
-            } else if let error = error {
-                print("Error fetching media: \(error.localizedDescription)")
             }
+        case .tvShow:
+            api.searchTV(query) { result, error in
+                if let result = result {
+                    tvShowResults = result.results
+                } else if let error = error {
+                    print("Error searching TV shows: \(error.localizedDescription)")
+                }
+            }
+        default:
+            return
         }
     }
 }
 
-struct MediaSectionView: View {
+struct ResultsScrollView: View {
     var title: String
-    var media: [Media]
+    var results: [Movie]
     
     var body: some View {
-        if !media.isEmpty {
+        if !results.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 Text(title)
                     .font(.title3)
@@ -70,9 +77,9 @@ struct MediaSectionView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack() {
-                        ForEach(media) { mediaItem in
-                            NavigationLink(destination: MediaDetailView(mediaItem: mediaItem)) {
-                                if let imageUrl = mediaItem.posterURL {
+                        ForEach(results) { result in
+                            NavigationLink(destination: MovieDetailView(movie: result)) {
+                                if let imageUrl = result.posterURL {
                                     AsyncImage(url: imageUrl) { image in
                                         image.resizable()
                                     } placeholder: {
@@ -98,7 +105,6 @@ struct MediaSectionView: View {
         }
     }
 }
-
 
 #Preview {
     SearchView()

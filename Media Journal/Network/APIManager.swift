@@ -25,24 +25,7 @@ class APIManager {
         }
     }
     
-    func searchMedia(_ query: String, mediaType: MediaType, completion: @escaping ([Media]?, Error?) -> Void) {
-        
-        let endpoint: String
-        switch mediaType {
-        case .movie:
-            endpoint = "movie"
-        case .tv:
-            endpoint = "tv"
-        case .person:
-            endpoint = "people"
-        }
-        
-        let urlString = "\(baseURL)search/\(endpoint)?query=\(query)&include_adult=false&language=en-US&page=1"
-        guard let url = URL(string: urlString) else {
-            let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid URL"])
-            completion(nil, urlError)
-            return
-        }
+    private func sendRequest<T: Decodable>(to url: URL, completion: @escaping (T?, Error?) -> Void) {
         
         var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
         request.httpMethod = "GET"
@@ -63,12 +46,152 @@ class APIManager {
             
             do {
                 let decoder = JSONDecoder()
-                let searchResponse = try decoder.decode(SearchResponse.self, from: data)
-                completion(searchResponse.results, nil)
+                let responseData = try decoder.decode(T.self, from: data)
+                completion(responseData, nil)
             } catch let decodeError {
                 completion(nil, decodeError)
             }
         }
         dataTask.resume()
+    }
+    
+    func searchCollection(_ query: String,
+                          includeAdult: Bool = false,
+                          language: String = "en-US",
+                          page: Int = 1,
+                          region: String? = nil,
+                          completion: @escaping (SearchResponse<Collection>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/collection")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("include_adult", includeAdult)
+        components.addQueryItem("language", language)
+        components.addQueryItem("page", page)
+        components.addQueryItem("region", region)
+        
+        guard let url = components.url else {
+            let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completion(nil, urlError)
+            return
+        }
+        
+        sendRequest(to: url, completion: completion)
+    }
+    
+    func searchCompany(_ query: String,
+                       page: Int = 1,
+                       completion: @escaping (SearchResponse<Company>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/company")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("page", page)
+        
+        guard let url = components.url else {
+            let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completion(nil, urlError)
+            return
+        }
+        
+        sendRequest(to: url, completion: completion)
+    }
+
+    func searchMovie(_ query: String,
+                     includeAdult: Bool = false,
+                     language: String = "en-US",
+                     primaryReleaseYear: Int? = nil,
+                     page: Int = 1,
+                     region: String? = nil,
+                     year: Int? = nil,
+                     completion: @escaping (SearchResponse<Movie>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/movie")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("include_adult", includeAdult)
+        components.addQueryItem("language", language)
+        components.addQueryItem("primary_release_year", primaryReleaseYear)
+        components.addQueryItem("page", page)
+        components.addQueryItem("region", region)
+        components.addQueryItem("year", year)
+        
+        guard let url = components.url else {
+                let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid URL"])
+                completion(nil, urlError)
+                return
+            }
+            
+        sendRequest(to: url, completion: completion)
+    }
+    
+    func searchMulti(_ query: String,
+                    includeAdult: Bool = false,
+                    language: String = "en-US",
+                    page: Int = 1,
+                    completion: @escaping (SearchResponse<Multi>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/multi")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("include_adult", includeAdult)
+        components.addQueryItem("language", language)
+        components.addQueryItem("page", page)
+        
+        guard let url = components.url else {
+                let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid URL"])
+                completion(nil, urlError)
+                return
+            }
+            
+        sendRequest(to: url, completion: completion)
+    }
+    
+    func searchPerson(_ query: String,
+                      includeAdult: Bool = false,
+                      language: String = "en-US",
+                      page: Int = 1,
+                      completion: @escaping (SearchResponse<Person>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/person")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("include_adult", includeAdult)
+        components.addQueryItem("language", language)
+        components.addQueryItem("page", page)
+        
+        guard let url = components.url else {
+            let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+            completion(nil, urlError)
+            return
+        }
+        
+        sendRequest(to: url, completion: completion)
+    }
+
+    func searchTV(_ query: String,
+                    firstAirDateYear: Int? = nil,
+                    includeAdult: Bool = false,
+                    language: String = "en-US",
+                    page: Int = 1,
+                    year: Int? = nil,
+                    completion: @escaping (SearchResponse<TV>?, Error?) -> Void) {
+        
+        var components = URLComponents(string: "\(baseURL)search/tv")!
+        
+        components.addQueryItem("query", query)
+        components.addQueryItem("first_air_date_year", firstAirDateYear)
+        components.addQueryItem("include_adult", includeAdult)
+        components.addQueryItem("language", language)
+        components.addQueryItem("page", page)
+        components.addQueryItem("year", year)
+        
+        guard let url = components.url else {
+                let urlError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey : "Invalid URL"])
+                completion(nil, urlError)
+                return
+            }
+            
+        sendRequest(to: url, completion: completion)
     }
 }
