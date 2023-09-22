@@ -12,7 +12,7 @@ struct SearchView: View {
     @State private var tvShowResults: [TV] = []
     @State private var query: String = ""
     
-    let api = APIManager.shared
+    let api = Network.shared
     
     var body: some View {
         NavigationStack {
@@ -43,19 +43,21 @@ struct SearchView: View {
     private func populateResults(searchType: SearchType) {
         switch searchType {
         case .movie:
-            api.searchMovie(query) { result, error in
-                if let result = result {
-                    movieResults = result.results
-                } else if let error = error {
+            api.searchMovie(query) { result in
+                switch result {
+                    case .success(let response):
+                        movieResults = response.results
+                case .failure(let error):
                     print("Error searching movies: \(error.localizedDescription)")
                 }
             }
         case .tvShow:
-            api.searchTV(query) { result, error in
-                if let result = result {
-                    tvShowResults = result.results
-                } else if let error = error {
-                    print("Error searching TV shows: \(error.localizedDescription)")
+            api.searchTV(query) { result in
+                switch result {
+                    case .success(let response):
+                        tvShowResults = response.results
+                case .failure(let error):
+                    print("Error searching movies: \(error.localizedDescription)")
                 }
             }
         default:

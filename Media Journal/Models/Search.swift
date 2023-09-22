@@ -1,5 +1,5 @@
 //
-//  SearchResponse.swift
+//  Search.swift
 //  Media Journal
 //
 //  Created by Alex Ulanch on 9/15/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchResponse<T: SearchResultItem>: Codable {
+struct SearchResponse<T: Searchable>: Codable {
     let page: Int
     let results: [T]
     let totalPages: Int
@@ -21,7 +21,7 @@ struct SearchResponse<T: SearchResultItem>: Codable {
     }
 }
 
-struct Collection: Codable, Identifiable, SearchResultItem {
+struct Collection: Searchable {
     let adult: Bool
     let id: Int
     let name: String?
@@ -56,7 +56,7 @@ struct Collection: Codable, Identifiable, SearchResultItem {
     }
 }
 
-struct Company: Codable, Identifiable, SearchResultItem {
+struct Company: Searchable {
     let id: Int
     let name: String?
     let originCountry: String?
@@ -77,12 +77,12 @@ struct Company: Codable, Identifiable, SearchResultItem {
     }
 }
 
-struct Keyword: Codable, Identifiable, SearchResultItem {
+struct Keyword: Searchable {
     let id: Int
     let name: String?
 }
 
-struct Movie: Codable, Identifiable, SearchResultItem {
+struct Movie: Searchable {
     let adult: Bool
     let genreIDs: [Int]?
     let id: Int
@@ -129,7 +129,7 @@ struct Movie: Codable, Identifiable, SearchResultItem {
     }
 }
 
-struct Multi: Codable, Identifiable, SearchResultItem {
+struct Multi: Searchable {
     let adult: Bool
     let genreIDs: [Int]?
     let id: Int
@@ -178,7 +178,7 @@ struct Multi: Codable, Identifiable, SearchResultItem {
     }
 }
 
-struct Person: Codable, Identifiable, SearchResultItem {
+struct Person: Searchable {
     let adult: Bool
     let gender: Int?
     let id: Int
@@ -190,9 +190,9 @@ struct Person: Codable, Identifiable, SearchResultItem {
     let profilePath: String?
     
     var profileURL: URL? { // TODO: Update Base URl
-        guard let backdropPath = profilePath else { return nil }
+        guard let profilePath = profilePath else { return nil }
         let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + backdropPath)
+        return URL(string: baseURL + profilePath)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -208,7 +208,7 @@ struct Person: Codable, Identifiable, SearchResultItem {
     }
 }
 
-struct TV: Codable, Identifiable, SearchResultItem {
+struct TV: Searchable {
     let adult: Bool
     let firstAirDate: String?
     let genreIDs: [Int]?
@@ -255,7 +255,7 @@ struct TV: Codable, Identifiable, SearchResultItem {
     }
 }
 
-protocol SearchResultItem: Codable, Identifiable {
+protocol Searchable: Codable, Identifiable {
     var id: Int { get }
 }
 
