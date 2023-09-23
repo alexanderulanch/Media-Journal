@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State private var movieResults: [Movie] = []
-    @State private var tvShowResults: [TV] = []
+    @StateObject var vm = SearchViewModel()
     @State private var query: String = ""
+
     
     let api = Network.shared
     
@@ -18,8 +18,11 @@ struct SearchView: View {
         NavigationStack {
             List {
                 Group {
-                    ResultsScrollView(title: "Movies", results: movieResults)
-//                    ResultsScrollView(title: "TV Shows", results: movieResults)
+                    ForEach(Array(vm.searchTypes), id: \.self) { searchType in
+                        if let result = vm.searchResults[searchType] {
+                            ResultsScrollView(title: searchType.rawValue, response: result)
+                        }
+                    }
                 }
                 .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                 .listRowSeparator(.hidden)
@@ -30,48 +33,21 @@ struct SearchView: View {
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
         .onChange(of: query) { oldValue, newValue in
-                if !newValue.isEmpty {
-                    populateResults(searchType: .movie)
-                    populateResults(searchType: .tvShow)
-                } else {
-                    movieResults = []
-                    tvShowResults = []
-                }
-        }
-    }
-    
-    private func populateResults(searchType: SearchType) {
-        switch searchType {
-        case .movie:
-            api.searchMovie(query) { result in
-                switch result {
-                    case .success(let response):
-                        movieResults = response.results
-                case .failure(let error):
-                    print("Error searching movies: \(error.localizedDescription)")
-                }
+            if !newValue.isEmpty {
+                vm.search(query: newValue)
+            } else {
+                vm.searchResults = [:]
             }
-        case .tvShow:
-            api.searchTV(query) { result in
-                switch result {
-                    case .success(let response):
-                        tvShowResults = response.results
-                case .failure(let error):
-                    print("Error searching movies: \(error.localizedDescription)")
-                }
-            }
-        default:
-            return
         }
     }
 }
 
 struct ResultsScrollView: View {
     var title: String
-    var results: [Movie]
+    var response: SearchResponse
     
     var body: some View {
-        if !results.isEmpty {
+        if !response.results.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 Text(title)
                     .font(.title3)
@@ -79,9 +55,9 @@ struct ResultsScrollView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack() {
-                        ForEach(results) { result in
-                            NavigationLink(destination: MovieDetailView(movie: result)) {
-                                if let imageUrl = result.posterURL {
+                        ForEach(response.results) { movie in
+                            NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                if let imageUrl = movie.posterURL ?? movie.logoURL {
                                     AsyncImage(url: imageUrl) { image in
                                         image.resizable()
                                     } placeholder: {

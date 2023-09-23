@@ -1,5 +1,5 @@
 //
-//  Media_JournalApp.swift
+//  App.swift
 //  Media Journal
 //
 //  Created by Alex Ulanch on 9/15/23.

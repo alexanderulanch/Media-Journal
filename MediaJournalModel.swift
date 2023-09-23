@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+@MainActor
+public class MediaJournalModel: ObservableObject {
+}

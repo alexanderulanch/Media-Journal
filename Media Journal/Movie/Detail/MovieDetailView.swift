@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    let movie: Movie
+    let movie: SearchResult
     
     var body: some View {
-        Text("Test")
+        Text(movie.name ?? movie.title ?? "")
     }
 }
 

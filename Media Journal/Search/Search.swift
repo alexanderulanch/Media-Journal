@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct SearchResponse<T: Searchable>: Codable {
+struct SearchResponse: Codable {
     let page: Int
-    let results: [T]
+    let results: [SearchResult]
     let totalPages: Int
     let totalResults: Int
     
@@ -21,251 +21,149 @@ struct SearchResponse<T: Searchable>: Codable {
     }
 }
 
-struct Collection: Searchable {
-    let adult: Bool
-    let id: Int
+struct SearchResult: Identifiable, Codable {
+    let id: Int?
+    let adult: Bool?
     let name: String?
     let originalLanguage: String?
     let originalName: String?
     let overview: String?
-    
+    let popularity: Double?
+    let genreIDs: [Int]?
+    let originalTitle: String?
+    let releaseDate: String?
+    let title: String?
+    let video: Bool?
+    let voteAverage: Double?
+    let voteCount: Int?
+    let originCountry: [String]?
+    let gender: Int?
+    let knownFor: [SearchResult]?
+    let knownForDepartment: String?
+    let firstAirDate: String?
+    let mediaType: String?
+
+    // Image/Logo URLs
+    var backdropURL: URL? {
+        if let path = backdropPath {
+            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+        }
+        return nil
+    }
+    var posterURL: URL? {
+        if let path = posterPath {
+            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+        }
+        return nil
+    }
+    var profileURL: URL? {
+        if let path = profilePath {
+            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+        }
+        return nil
+    }
+    var logoURL: URL? {
+        if let path = logoPath {
+            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+        }
+        return nil
+    }
+
+    // Image/Logo paths
     private let backdropPath: String?
     private let posterPath: String?
-    
-    var backdropURL: URL? {
-        guard let backdropPath = backdropPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + backdropPath)
-    }
-    
-    var posterURL: URL? {
-        guard let posterPath = posterPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + posterPath)
-    }
-    
+    private let profilePath: String?
+    private let logoPath: String?
+
     enum CodingKeys: String, CodingKey {
-        case adult
-        case backdropPath = "backdrop_path"
         case id
+        case adult
         case name
         case originalLanguage = "original_language"
         case originalName = "original_name"
         case overview
-        case posterPath = "poster_path"
-    }
-}
-
-struct Company: Searchable {
-    let id: Int
-    let name: String?
-    let originCountry: String?
-    
-    private let logoPath: String?
-    
-    var logoURL: URL? {
-        guard let logoPath = logoPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + logoPath)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case logoPath = "logo_path"
-        case name
+        case popularity
+        case genreIDs = "genre_ids"
+        case originalTitle = "original_title"
+        case releaseDate = "release_date"
+        case title
+        case video
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
         case originCountry = "origin_country"
-    }
-}
-
-struct Keyword: Searchable {
-    let id: Int
-    let name: String?
-}
-
-struct Movie: Searchable {
-    let adult: Bool
-    let genreIDs: [Int]?
-    let id: Int
-    let originalLanguage: String?
-    let originalTitle: String?
-    let overview: String?
-    let popularity: Double?
-    let releaseDate: String?
-    let title: String?
-    let video: Bool?
-    let voteAverage: Double?
-    let voteCount: Int?
-    
-    private let backdropPath: String?
-    private let posterPath: String?
-    
-    var backdropURL: URL? {
-        guard let backdropPath = backdropPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + backdropPath)
-    }
-    
-    var posterURL: URL? {
-        guard let posterPath = posterPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + posterPath)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case adult
-        case backdropPath = "backdrop_path"
-        case genreIDs = "genre_ids"
-        case id
-        case originalLanguage = "original_language"
-        case originalTitle = "original_title"
-        case overview
-        case popularity
-        case posterPath = "poster_path"
-        case releaseDate = "release_date"
-        case title
-        case video
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
-    }
-}
-
-struct Multi: Searchable {
-    let adult: Bool
-    let genreIDs: [Int]?
-    let id: Int
-    let mediaType: String?
-    let originalLanguage: String?
-    let originalTitle: String?
-    let overview: String?
-    let popularity: Double?
-    let releaseDate: String?
-    let title: String?
-    let video: Bool?
-    let voteAverage: Double?
-    let voteCount: Int?
-    
-    private let backdropPath: String?
-    private let posterPath: String?
-    
-    var backdropURL: URL? {
-        guard let backdropPath = backdropPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + backdropPath)
-    }
-    
-    var posterURL: URL? {
-        guard let posterPath = posterPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + posterPath)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case adult
-        case backdropPath = "backdrop_path"
-        case genreIDs = "genre_ids"
-        case id
-        case mediaType = "media_type"
-        case originalLanguage = "original_language"
-        case originalTitle = "original_title"
-        case overview
-        case popularity
-        case posterPath = "poster_path"
-        case releaseDate = "release_date"
-        case title
-        case video
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
-    }
-}
-
-struct Person: Searchable {
-    let adult: Bool
-    let gender: Int?
-    let id: Int
-    let knownFor: [Multi]?
-    let knownForDepartment: String?
-    let name: String?
-    let originalName: String?
-    let popularity: Double?
-    let profilePath: String?
-    
-    var profileURL: URL? { // TODO: Update Base URl
-        guard let profilePath = profilePath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + profilePath)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case adult
         case gender
-        case id
         case knownFor = "known_for"
         case knownForDepartment = "known_for_department"
-        case name
-        case originalName = "original_name"
-        case popularity
-        case profilePath = "profile_path"
-    }
-}
-
-struct TV: Searchable {
-    let adult: Bool
-    let firstAirDate: String?
-    let genreIDs: [Int]?
-    let id: Int
-    let name: String?
-    let originalCountry: [String]?
-    let originalLanguage: String?
-    let originalName: String?
-    let overview: String?
-    let popularity: Double?
-    let voteAverage: Double?
-    let voteCount: Int?
-    
-    private let backdropPath: String?
-    private let posterPath: String?
-    
-    var backdropURL: URL? {
-        guard let backdropPath = backdropPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + backdropPath)
-    }
-    
-    var posterURL: URL? {
-        guard let posterPath = posterPath else { return nil }
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        return URL(string: baseURL + posterPath)
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case adult
-        case backdropPath = "backdrop_path"
         case firstAirDate = "first_air_date"
-        case genreIDs = "genre_ids"
-        case id
-        case name
-        case originalCountry = "original_country"
-        case originalLanguage = "original_language"
-        case originalName = "original_name"
-        case overview
-        case popularity
+        case mediaType = "media_type"
+        case backdropPath = "backdrop_path"
         case posterPath = "poster_path"
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
+        case profilePath = "profile_path"
+        case logoPath = "logo_path"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try? container.decode(Int.self, forKey: .id)
+        adult = try? container.decode(Bool.self, forKey: .adult)
+        name = try? container.decode(String?.self, forKey: .name)
+        originalLanguage = try? container.decode(String?.self, forKey: .originalLanguage)
+        originalName = try? container.decode(String?.self, forKey: .originalName)
+        overview = try? container.decode(String?.self, forKey: .overview)
+        popularity = try? container.decode(Double?.self, forKey: .popularity)
+        genreIDs = try? container.decode([Int]?.self, forKey: .genreIDs)
+        originalTitle = try? container.decode(String?.self, forKey: .originalTitle)
+        releaseDate = try? container.decode(String?.self, forKey: .releaseDate)
+        title = try? container.decode(String?.self, forKey: .title)
+        video = try? container.decode(Bool?.self, forKey: .video)
+        voteAverage = try? container.decode(Double?.self, forKey: .voteAverage)
+        voteCount = try? container.decode(Int?.self, forKey: .voteCount)
+        gender = try? container.decode(Int?.self, forKey: .gender)
+        knownFor = try? container.decode([SearchResult]?.self, forKey: .knownFor)
+        knownForDepartment = try? container.decode(String?.self, forKey: .knownForDepartment)
+        firstAirDate = try? container.decode(String?.self, forKey: .firstAirDate)
+        mediaType = try? container.decode(String?.self, forKey: .mediaType)
+        backdropPath = try? container.decode(String?.self, forKey: .backdropPath)
+        posterPath = try? container.decode(String?.self, forKey: .posterPath)
+        logoPath = try? container.decode(String?.self, forKey: .logoPath)
+        profilePath = try? container.decode(String?.self, forKey: .profilePath)
+
+        if let countriesArray = try? container.decode([String].self, forKey: .originCountry) {
+            originCountry = countriesArray
+        } else if let singleCountry = try? container.decode(String.self, forKey: .originCountry) {
+            originCountry = [singleCountry]
+        } else {
+            originCountry = nil
+        }
     }
 }
 
-protocol Searchable: Codable, Identifiable {
-    var id: Int { get }
-}
-
-enum SearchType {
-    case collection
+enum SearchType: String, CaseIterable {
+    case collection = "Collections"
     case company
     case keyword
-    case movie
+    case movie = "Movies"
     case multi
     case person
-    case tvShow
-}
+    case tvShow = "TV Shows"
     
+    var endpoint: Endpoint {
+        switch self {
+        case .collection:
+            return TMDBEndpoint.searchCollection
+        case .company:
+            return TMDBEndpoint.searchCompany
+        case .keyword:
+            return TMDBEndpoint.searchKeyword
+        case .movie:
+            return TMDBEndpoint.searchMovie
+        case .multi:
+            return TMDBEndpoint.searchMulti
+        case .person:
+            return TMDBEndpoint.searchPerson
+        case .tvShow:
+            return TMDBEndpoint.searchTV
+        }
+    }
+}
