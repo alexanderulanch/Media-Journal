@@ -11,7 +11,6 @@ struct SearchView: View {
     @StateObject var vm = SearchViewModel()
     @State private var query: String = ""
 
-    
     let api = Network.shared
     
     var body: some View {
@@ -31,7 +30,7 @@ struct SearchView: View {
             .toolbarTitleDisplayMode(.inlineLarge)
             .listStyle(.plain)
         }
-        .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Shows, Movies, Games and More")
+        .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Movies, Shows, Games and More")
         .onChange(of: query) { oldValue, newValue in
             if !newValue.isEmpty {
                 vm.search(query: newValue)
@@ -56,9 +55,9 @@ struct ResultsScrollView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack() {
                         ForEach(response.results) { movie in
-                            NavigationLink(destination: MovieDetailView(movie: movie)) {
-                                if let imageUrl = movie.posterURL ?? movie.logoURL {
-                                    AsyncImage(url: imageUrl) { image in
+                            NavigationLink(destination: MovieView(id: movie.id ?? 0)) {
+                                if let imageURL = movie.posterURL {
+                                    AsyncImage(url: imageURL) { image in
                                         image.resizable()
                                     } placeholder: {
                                         Color

@@ -15,19 +15,26 @@ class SearchViewModel: ObservableObject {
 
     func search(query: String) {
         searchTypes.forEach { searchType in
-            populateResults(query, searchType: searchType)
-        }
-    }
+            var components = URLComponents(string: searchType.endpoint.urlPath)!
+            components.addQueryItem("query", query)
+            for (key, value) in searchType.endpoint.parameters {
+                components.addQueryItem(key, value)
+            }
 
-    private func populateResults(_ query: String, searchType: SearchType) {
-        network.search(query, endpoint: searchType.endpoint) { (result: Result<SearchResponse, Error>) in
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.searchResults[searchType] = response
+            guard let url = components.url else {
+                print("Invalid URL for searchType \(searchType.rawValue)")
+                return
+            }
+
+            network.request(url: url, headers: searchType.endpoint.headers) { (result: Result<SearchResponse, Error>) in
+                switch result {
+                case .success(let response):
+                    DispatchQueue.main.async {
+                        self.searchResults[searchType] = response
+                    }
+                case .failure(let error):
+                    print("Error searching for \(searchType.rawValue): \(error.localizedDescription)")
                 }
-            case .failure(let error):
-                print("Error searching for \(searchType.rawValue): \(error.localizedDescription)")
             }
         }
     }

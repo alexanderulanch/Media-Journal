@@ -10,6 +10,7 @@ import Foundation
 struct TMDbAPIConfig {
     static let baseURL = "https://api.themoviedb.org"
     static let imagePath = "https://image.tmdb.org/t/p/w500"
+    static let backdropPath = "https://image.tmdb.org/t/p/w1280"
     
     static var apiToken: String? {
         if let token = Bundle.main.object(forInfoDictionaryKey: "API_TOKEN") as? String {

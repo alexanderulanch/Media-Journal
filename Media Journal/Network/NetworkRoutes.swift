@@ -20,19 +20,18 @@ protocol Endpoint {
 
 enum TMDBEndpoint: Endpoint {
     case searchCollection
-    case searchCompany
     case searchKeyword
     case searchMovie
     case searchMulti
     case searchPerson
     case searchTV
+    case movie
+    case credits
 
     var route: String {
         switch self {
         case .searchCollection:
             return "/3/search/collection"
-        case .searchCompany:
-            return "/3/search/company"
         case .searchKeyword:
             return "/3/search/keyword"
         case .searchMovie:
@@ -43,6 +42,10 @@ enum TMDBEndpoint: Endpoint {
             return "/3/search/person"
         case .searchTV:
             return "/3/search/tv"
+        case .movie:
+            return "/3/movie"
+        case .credits:
+            return "/3/movie"
         }
     }
 
@@ -73,10 +76,6 @@ enum TMDBEndpoint: Endpoint {
                 "language": "en-US",
                 "page": 1,
                 "region": nil
-            ]
-        case .searchCompany:
-            return [
-                "page": 1
             ]
         case .searchKeyword:
             return [
@@ -110,6 +109,15 @@ enum TMDBEndpoint: Endpoint {
                 "language": "en-US",
                 "page": 1,
                 "year": nil
+            ]
+        case .movie:
+            return [
+                "append_to_response": nil,
+                "language": "en-US"
+            ]
+        case .credits:
+            return [
+                "language": "en-US"
             ]
         }
     }

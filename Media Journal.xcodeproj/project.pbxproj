@@ -12,7 +12,7 @@
 		277D09522AB4DD1600CC94AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277D09512AB4DD1600CC94AF /* ContentView.swift */; };
 		277D09542AB4DD1A00CC94AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 277D09532AB4DD1A00CC94AF /* Assets.xcassets */; };
 		277D09582AB4DD1A00CC94AF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 277D09572AB4DD1A00CC94AF /* Preview Assets.xcassets */; };
-		279A2E042AB6758A0085CB15 /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E032AB6758A0085CB15 /* MovieDetailView.swift */; };
+		279A2E042AB6758A0085CB15 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E032AB6758A0085CB15 /* MovieView.swift */; };
 		279A2E062ABBAFA10085CB15 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E052ABBAFA10085CB15 /* Extensions.swift */; };
 		279A2E082ABBC9E80085CB15 /* TVShowDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E072ABBC9E80085CB15 /* TVShowDetailView.swift */; };
 		279A2E0E2ABC88EE0085CB15 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E0D2ABC88EE0085CB15 /* AccountView.swift */; };
@@ -22,6 +22,9 @@
 		279A2E282ABCE51F0085CB15 /* NetworkRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E272ABCE51F0085CB15 /* NetworkRoutes.swift */; };
 		279A2E2A2ABCE9620085CB15 /* NetworkConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E292ABCE9620085CB15 /* NetworkConfigs.swift */; };
 		279A2E2D2ABE395E0085CB15 /* SearchFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E2C2ABE395E0085CB15 /* SearchFilterView.swift */; };
+		279A2E2F2ABF731C0085CB15 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E2E2ABF731C0085CB15 /* Movie.swift */; };
+		279A2E332ABF77760085CB15 /* MovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E322ABF77760085CB15 /* MovieViewModel.swift */; };
+		279A2E352ABFEBB40085CB15 /* MovieHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E342ABFEBB40085CB15 /* MovieHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +37,7 @@
 		277D09572AB4DD1A00CC94AF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		277D096C2AB54D1300CC94AF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		277D096D2AB54F2800CC94AF /* Media-Journal-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Media-Journal-Info.plist"; sourceTree = SOURCE_ROOT; };
-		279A2E032AB6758A0085CB15 /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
+		279A2E032AB6758A0085CB15 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		279A2E052ABBAFA10085CB15 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		279A2E072ABBC9E80085CB15 /* TVShowDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowDetailView.swift; sourceTree = "<group>"; };
 		279A2E0D2ABC88EE0085CB15 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -44,6 +47,9 @@
 		279A2E272ABCE51F0085CB15 /* NetworkRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRoutes.swift; sourceTree = "<group>"; };
 		279A2E292ABCE9620085CB15 /* NetworkConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfigs.swift; sourceTree = "<group>"; };
 		279A2E2C2ABE395E0085CB15 /* SearchFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterView.swift; sourceTree = "<group>"; };
+		279A2E2E2ABF731C0085CB15 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		279A2E322ABF77760085CB15 /* MovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewModel.swift; sourceTree = "<group>"; };
+		279A2E342ABFEBB40085CB15 /* MovieHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +101,8 @@
 				279A2E242ABCA3A90085CB15 /* Book */,
 				279A2E202ABCA2DB0085CB15 /* Movie */,
 				27441CBF2AB5FEF100FF328A /* Search */,
-				279A2E0A2ABBF82E0085CB15 /* Extensions */,
 				277D09642AB4E85B00CC94AF /* Network */,
+				279A2E0A2ABBF82E0085CB15 /* Extensions */,
 				277D09532AB4DD1A00CC94AF /* Assets.xcassets */,
 				277D09552AB4DD1A00CC94AF /* Media_Journal.entitlements */,
 				277D09562AB4DD1A00CC94AF /* Preview Content */,
@@ -150,7 +156,10 @@
 		279A2E202ABCA2DB0085CB15 /* Movie */ = {
 			isa = PBXGroup;
 			children = (
-				279A2E232ABCA3680085CB15 /* Detail */,
+				279A2E2E2ABF731C0085CB15 /* Movie.swift */,
+				279A2E032AB6758A0085CB15 /* MovieView.swift */,
+				279A2E322ABF77760085CB15 /* MovieViewModel.swift */,
+				279A2E342ABFEBB40085CB15 /* MovieHeader.swift */,
 			);
 			path = Movie;
 			sourceTree = "<group>";
@@ -167,14 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				279A2E072ABBC9E80085CB15 /* TVShowDetailView.swift */,
-			);
-			path = Detail;
-			sourceTree = "<group>";
-		};
-		279A2E232ABCA3680085CB15 /* Detail */ = {
-			isa = PBXGroup;
-			children = (
-				279A2E032AB6758A0085CB15 /* MovieDetailView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -268,9 +269,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				279A2E352ABFEBB40085CB15 /* MovieHeader.swift in Sources */,
+				279A2E2F2ABF731C0085CB15 /* Movie.swift in Sources */,
 				279A2E262ABCE1FB0085CB15 /* SearchViewModel.swift in Sources */,
 				279A2E1D2ABCA22A0085CB15 /* Network.swift in Sources */,
-				279A2E042AB6758A0085CB15 /* MovieDetailView.swift in Sources */,
+				279A2E042AB6758A0085CB15 /* MovieView.swift in Sources */,
 				27441CC12AB5FF0400FF328A /* SearchView.swift in Sources */,
 				279A2E082ABBC9E80085CB15 /* TVShowDetailView.swift in Sources */,
 				279A2E282ABCE51F0085CB15 /* NetworkRoutes.swift in Sources */,
@@ -278,6 +281,7 @@
 				277D09522AB4DD1600CC94AF /* ContentView.swift in Sources */,
 				277D09502AB4DD1600CC94AF /* App.swift in Sources */,
 				279A2E1B2ABCA1DD0085CB15 /* Search.swift in Sources */,
+				279A2E332ABF77760085CB15 /* MovieViewModel.swift in Sources */,
 				279A2E0E2ABC88EE0085CB15 /* AccountView.swift in Sources */,
 				279A2E2D2ABE395E0085CB15 /* SearchFilterView.swift in Sources */,
 				279A2E062ABBAFA10085CB15 /* Extensions.swift in Sources */,
@@ -425,8 +429,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -464,8 +468,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

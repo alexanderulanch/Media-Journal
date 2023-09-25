@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension URLComponents {
     mutating func addQueryItem<T>(_ name: String, _ value: T?) {
@@ -20,3 +21,5 @@ extension URLComponents {
         }
     }
 }
+
+
