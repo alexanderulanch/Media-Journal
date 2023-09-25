@@ -11,7 +11,6 @@ class MovieViewModel: ObservableObject {
     @Published var movie: Movie? = nil
     @Published var credits: Credits? = nil
     
-    static let shared = MovieViewModel()
     private let network = Network.shared
     
     func getMovie(_ id: Int) {
@@ -41,7 +40,7 @@ class MovieViewModel: ObservableObject {
         }
     }
     
-    private func getCredits(_ id: Int) {
+    func getCredits(_ id: Int) {
         guard var components = URLComponents(string: TMDBEndpoint.credits.urlPath + "/\(String(id))/credits") else {
             print("Error: Failed to create URL components from \(TMDBEndpoint.credits.urlPath)")
             return

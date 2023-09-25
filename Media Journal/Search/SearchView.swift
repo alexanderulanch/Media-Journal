@@ -10,8 +10,6 @@ import SwiftUI
 struct SearchView: View {
     @StateObject var vm = SearchViewModel()
     @State private var query: String = ""
-
-    let api = Network.shared
     
     var body: some View {
         NavigationStack {

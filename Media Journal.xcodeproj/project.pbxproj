@@ -24,7 +24,6 @@
 		279A2E2D2ABE395E0085CB15 /* SearchFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E2C2ABE395E0085CB15 /* SearchFilterView.swift */; };
 		279A2E2F2ABF731C0085CB15 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E2E2ABF731C0085CB15 /* Movie.swift */; };
 		279A2E332ABF77760085CB15 /* MovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E322ABF77760085CB15 /* MovieViewModel.swift */; };
-		279A2E352ABFEBB40085CB15 /* MovieHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A2E342ABFEBB40085CB15 /* MovieHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +48,6 @@
 		279A2E2C2ABE395E0085CB15 /* SearchFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterView.swift; sourceTree = "<group>"; };
 		279A2E2E2ABF731C0085CB15 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		279A2E322ABF77760085CB15 /* MovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewModel.swift; sourceTree = "<group>"; };
-		279A2E342ABFEBB40085CB15 /* MovieHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +157,6 @@
 				279A2E2E2ABF731C0085CB15 /* Movie.swift */,
 				279A2E032AB6758A0085CB15 /* MovieView.swift */,
 				279A2E322ABF77760085CB15 /* MovieViewModel.swift */,
-				279A2E342ABFEBB40085CB15 /* MovieHeader.swift */,
 			);
 			path = Movie;
 			sourceTree = "<group>";
@@ -269,7 +266,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				279A2E352ABFEBB40085CB15 /* MovieHeader.swift in Sources */,
 				279A2E2F2ABF731C0085CB15 /* Movie.swift in Sources */,
 				279A2E262ABCE1FB0085CB15 /* SearchViewModel.swift in Sources */,
 				279A2E1D2ABCA22A0085CB15 /* Network.swift in Sources */,

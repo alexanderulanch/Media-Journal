@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct MovieView: View {
-    @ObservedObject var vm = MovieViewModel.shared
+    @ObservedObject var vm = MovieViewModel()
+    @State private var isLoading = true
+
     let id: Int
     
     var body: some View {
@@ -92,7 +94,7 @@ struct Header: View {
                             Color.black.opacity(0)
                         ]), startPoint: .bottom, endPoint: .top)
                     )
-                VStack(spacing: 15) {
+                VStack(alignment: .leading, spacing: 15) {
                     HStack() {
                         VStack(alignment: .leading) {
                             Text(movie.title ?? "")
@@ -127,15 +129,19 @@ struct Header: View {
                                 HStack(alignment: .firstTextBaseline) {
                                     let directors = credits.crew?.filter { $0.job == "Director" }
                                     if let directors = directors, !directors.isEmpty {
-                                        ForEach(directors) { director in
-                                            Text("DIRECTED BY")
-                                                .font(.subheadline)
-                                                .fontWeight(.light)
-                                                .foregroundStyle(.secondary)
-                                            if let name = director.name {
-                                                Text(name)
-                                                    .font(.subheadline)
-                                                    .bold()
+                                        Text("DIRECTED BY")
+                                            .font(.subheadline)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.secondary)
+                                            .lineLimit(1)
+                                            .layoutPriority(1)
+                                        VStack(alignment: .leading) {
+                                            ForEach(directors) { director in
+                                                if let name = director.name {
+                                                    Text(name)
+                                                        .font(.subheadline)
+                                                        .bold()
+                                                }
                                             }
                                         }
                                     }
@@ -177,7 +183,7 @@ struct Header: View {
 
 
 #Preview {
-    MovieView(id: 11544)
+    MovieView(id: 419430)
 }
 
 
