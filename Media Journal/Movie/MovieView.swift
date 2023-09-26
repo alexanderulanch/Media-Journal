@@ -10,14 +10,14 @@ import SwiftUI
 struct MovieView: View {
     @ObservedObject var vm = MovieViewModel()
     @State private var isLoading = true
-
+    
     let id: Int
     
     var body: some View {
         ScrollView(showsIndicators: false) {
-            if let movie = vm.movie {
+            if vm.movie != nil {
                 VStack(alignment: .leading) {
-                    Header(movie: movie, credits: vm.credits ?? nil)
+                    Header(viewModel: vm)
                     Text("Trailers")
                         .font(.title2)
                         .bold()
@@ -47,10 +47,11 @@ class ImageLoader: ObservableObject {
 }
 
 struct Header: View {
-    let movie: Movie
-    let credits: Credits?
+    let viewModel: MovieViewModel
     var initialHeight: CGFloat = UIScreen.main.bounds.height * 0.35
     var initialWidth: CGFloat = UIScreen.main.bounds.width
+    var certifications = ["G", "PG", "PG-13", "NC-17", "R"]
+    @State private var rating: String? = nil
     
     @StateObject private var imageLoader = ImageLoader()
     
@@ -97,24 +98,24 @@ struct Header: View {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack() {
                         VStack(alignment: .leading) {
-                            Text(movie.title ?? "")
+                            Text(viewModel.movie?.title ?? "")
                                 .font(.title)
                                 .fontWeight(.bold)
                             HStack(spacing: 0) {
-                                if let genre = movie.genres.first?.name {
+                                if let genre = viewModel.movie?.genres.first?.name {
                                     Text(genre)
                                         .font(.subheadline)
                                 }
                                 
-                                if let releaseDate = movie.releaseDate, let year = releaseDate.split(separator: "-").first {
+                                if let releaseDate = viewModel.movie?.releaseDate, let year = releaseDate.split(separator: "-").first {
                                     Text(" • \(String(year))")
                                         .font(.subheadline)
                                 }
                                 
-                                if let runtime = movie.runtime {
+                                if let runtime = viewModel.movie?.runtime {
                                     let hours = runtime / 60
                                     let minutes = runtime % 60
-
+                                    
                                     if hours == 0 {
                                         Text(" • \(minutes) min")
                                             .font(.subheadline)
@@ -125,7 +126,7 @@ struct Header: View {
                                 }
                             }
                             .foregroundStyle(Color.secondary)
-                            if let credits = credits {
+                            if let credits = viewModel.credits {
                                 HStack(alignment: .firstTextBaseline) {
                                     let directors = credits.crew?.filter { $0.job == "Director" }
                                     if let directors = directors, !directors.isEmpty {
@@ -147,9 +148,15 @@ struct Header: View {
                                     }
                                 }
                             }
+                            if let rating {
+                                Image(rating)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 15)
+                            }
                         }
                         Spacer()
-                        if let posterURL = movie.posterURL {
+                        if let posterURL = viewModel.movie?.posterURL {
                             AsyncImage(url: posterURL) { image in
                                 image.resizable()
                             } placeholder: {
@@ -161,7 +168,7 @@ struct Header: View {
                         }
                     }
                     
-                    Text(movie.overview ?? "")
+                    Text(viewModel.movie?.overview ?? "")
                         .lineLimit(3)
                         .padding(.vertical, 5)
                 }
@@ -173,8 +180,20 @@ struct Header: View {
         .frame(width: initialWidth)
         .environment(\.colorScheme, .dark)
         .onAppear {
-            if let backdropURL = movie.backdropURL {
+            if let backdropURL = viewModel.movie?.backdropURL {
                 imageLoader.load(from: backdropURL)
+            }
+            guard let results = viewModel.releaseDateResponse?.results else { return }
+            
+            for result in results {
+                guard result.iso31661 == "US", let releaseDates = result.releaseDates else { continue }
+                
+                for releaseDate in releaseDates {
+                    if let cert = releaseDate.certification, certifications.contains(cert) {
+                        rating = cert
+                        return
+                    }
+                }
             }
         }
     }
@@ -183,7 +202,7 @@ struct Header: View {
 
 
 #Preview {
-    MovieView(id: 419430)
+    MovieView(id: 80)
 }
 
 

@@ -10,11 +10,13 @@ import Foundation
 class MovieViewModel: ObservableObject {
     @Published var movie: Movie? = nil
     @Published var credits: Credits? = nil
+    @Published var releaseDateResponse: ReleaseDateResponse? = nil
     
     private let network = Network.shared
     
     func getMovie(_ id: Int) {
         getCredits(id)
+        getReleaseDates(id)
         guard var components = URLComponents(string: TMDBEndpoint.movie.urlPath + "/\(String(id))") else {
             print("Error: Failed to create URL components from \(TMDBEndpoint.movie.urlPath)")
             return
@@ -40,7 +42,7 @@ class MovieViewModel: ObservableObject {
         }
     }
     
-    func getCredits(_ id: Int) {
+    private func getCredits(_ id: Int) {
         guard var components = URLComponents(string: TMDBEndpoint.credits.urlPath + "/\(String(id))/credits") else {
             print("Error: Failed to create URL components from \(TMDBEndpoint.credits.urlPath)")
             return
@@ -62,6 +64,28 @@ class MovieViewModel: ObservableObject {
                 }
             case .failure(let error):
                 print("Error searching for Credits: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func getReleaseDates(_ id: Int) {
+        guard let components = URLComponents(string: TMDBEndpoint.credits.urlPath + "/\(String(id))/release_dates") else {
+            print("Error: Failed to create URL components from \(TMDBEndpoint.credits.urlPath)")
+            return
+        }
+        guard let url = components.url else {
+            print("Invalid URL for ReleaseDates")
+            return
+        }
+        
+        network.request(url: url, headers: TMDBEndpoint.releaseDates.headers) { (result: Result<ReleaseDateResponse, Error>) in
+            switch result {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.releaseDateResponse = response
+                }
+            case .failure(let error):
+                print("Error searching for Release Dates: \(error.localizedDescription)")
             }
         }
     }

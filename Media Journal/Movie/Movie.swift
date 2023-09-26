@@ -133,3 +133,22 @@ struct CrewMember: Codable, Identifiable {
     let department: String?
     let job: String?
 }
+
+struct ReleaseDateResponse: Codable, Identifiable {
+    let id: Int?
+    let results: [ReleaseDateResult]?
+}
+
+struct ReleaseDateResult: Codable {
+    let iso31661: String?
+    let releaseDates: [ReleaseDate]?
+}
+
+struct ReleaseDate: Codable {
+    let certification: String?
+    let descriptors: [String]?
+    let iso6391: String?
+    let note: String?
+    let releaseDate: String?
+    let type: Int?
+}

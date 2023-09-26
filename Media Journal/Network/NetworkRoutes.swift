@@ -27,6 +27,7 @@ enum TMDBEndpoint: Endpoint {
     case searchTV
     case movie
     case credits
+    case releaseDates
 
     var route: String {
         switch self {
@@ -45,6 +46,8 @@ enum TMDBEndpoint: Endpoint {
         case .movie:
             return "/3/movie"
         case .credits:
+            return "/3/movie"
+        case .releaseDates:
             return "/3/movie"
         }
     }
@@ -119,6 +122,8 @@ enum TMDBEndpoint: Endpoint {
             return [
                 "language": "en-US"
             ]
+        default :
+            return [:]
         }
     }
 }
