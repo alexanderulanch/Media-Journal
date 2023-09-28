@@ -42,46 +42,64 @@ struct SearchResult: Identifiable, Codable {
 
     var backdropURL: URL? {
         if let path = backdropPath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
     var posterURL: URL? {
         if let path = posterPath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
     var profileURL: URL? {
         if let path = profilePath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
 }
 
-enum SearchType: String, CaseIterable {
-    case collection = "Collections"
-    case keyword
-    case movie = "Movies"
-    case multi
-    case person
-    case tvShow = "TV Shows"
+enum SearchType {
+    case collection(String)
+    case keyword(String)
+    case movie(String)
+    case multi(String)
+    case person(String)
+    case tvShow(String)
+    
+    var description: String {
+        switch self {
+        case .collection:
+            return "Collections"
+        case .keyword:
+            return "Keyword"
+        case .movie:
+            return "Movies"
+        case .multi:
+            return "Multi"
+        case .person:
+            return "Person"
+        case .tvShow:
+            return "TV Shows"
+        }
+    }
     
     var endpoint: Endpoint {
         switch self {
-        case .collection:
-            return TMDBEndpoint.searchCollection
-        case .keyword:
-            return TMDBEndpoint.searchKeyword
-        case .movie:
-            return TMDBEndpoint.searchMovie
-        case .multi:
-            return TMDBEndpoint.searchMulti
-        case .person:
-            return TMDBEndpoint.searchPerson
-        case .tvShow:
-            return TMDBEndpoint.searchTV
+        case .collection(let query):
+            return TMDBEndpoint.searchCollection(query)
+        case .keyword(let query):
+            return TMDBEndpoint.searchKeyword(query)
+        case .movie(let query):
+            return TMDBEndpoint.searchMovie(query)
+        case .multi(let query):
+            return TMDBEndpoint.searchMulti(query)
+        case .person(let query):
+            return TMDBEndpoint.searchPerson(query)
+        case .tvShow(let query):
+            return TMDBEndpoint.searchTV(query)
         }
     }
 }
+

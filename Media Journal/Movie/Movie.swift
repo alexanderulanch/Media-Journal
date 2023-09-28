@@ -9,6 +9,14 @@ import Foundation
 
 struct Movie: Codable, Identifiable {
     let id: Int
+    let credits: Credits?
+    let details: MovieDetails?
+    let releaseDates: [ReleaseDateResult]?
+    let videos: [Video]?
+}
+
+struct MovieDetails: Codable, Identifiable {
+    let id: Int
     let imbdId: String?
     let adult: Bool?
     let belongsToCollection: Collection?
@@ -37,7 +45,7 @@ struct Movie: Codable, Identifiable {
     
     var backdropURL: URL? {
         if let path = backdropPath {
-            return URL(string: "\(TMDbAPIConfig.backdropPath + path)")
+            return URL(string: "\(TMDbAPIConfig.backdropUrl + path)")
         }
         return nil
     }
@@ -49,7 +57,7 @@ struct Movie: Codable, Identifiable {
     }
     var posterURL: URL? {
         if let path = posterPath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
@@ -87,13 +95,13 @@ struct Collection: Codable, Identifiable {
     
     var posterURL: URL? {
         if let path = posterPath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
     var backdropURL: URL? {
         if let path = backdropPath {
-            return URL(string: "\(TMDbAPIConfig.imagePath + path)")
+            return URL(string: "\(TMDbAPIConfig.imageUrl + path)")
         }
         return nil
     }
@@ -152,3 +160,30 @@ struct ReleaseDate: Codable {
     let releaseDate: String?
     let type: Int?
 }
+
+struct VideoResponse: Codable {
+    let id: Int
+    let results: [Video]
+}
+
+struct Video: Codable {
+    let iso6391: String
+    let iso31661: String
+    let name: String
+    let key: String
+    let site: String
+    let size: Int
+    let type: String
+    let official: Bool
+    let publishedAt: String
+    let id: String
+}
+
+enum Certification: String, CaseIterable {
+    case G
+    case PG
+    case PG13 = "PG-13"
+    case NC17 = "NC-17"
+    case R
+}
+

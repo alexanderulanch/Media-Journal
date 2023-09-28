@@ -15,9 +15,9 @@ struct SearchView: View {
         NavigationStack {
             List {
                 Group {
-                    ForEach(Array(vm.searchTypes), id: \.self) { searchType in
-                        if let result = vm.searchResults[searchType] {
-                            ResultsScrollView(title: searchType.rawValue, response: result)
+                    ForEach(Array(vm.searchResults.keys), id: \.self) { key in
+                        if let response = vm.searchResults[key] {
+                            ResultsScrollView(title: key, response: response)
                         }
                     }
                 }
@@ -30,11 +30,7 @@ struct SearchView: View {
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Movies, Shows, Games and More")
         .onChange(of: query) { oldValue, newValue in
-            if !newValue.isEmpty {
-                vm.search(query: newValue)
-            } else {
-                vm.searchResults = [:]
-            }
+            vm.search(query: newValue, searchTypes: [.movie(newValue)])
         }
     }
 }
@@ -52,24 +48,42 @@ struct ResultsScrollView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack() {
-                        ForEach(response.results) { movie in
-                            NavigationLink(destination: MovieView(id: movie.id ?? 0)) {
-                                if let imageURL = movie.posterURL {
-                                    AsyncImage(url: imageURL) { image in
-                                        image.resizable()
-                                    } placeholder: {
-                                        Color
-                                            .secondary
-                                            .frame(width: 100, height: 150)
-                                            .cornerRadius(8)
-                                    }
-                                    .frame(width: 100, height: 150)
-                                    .cornerRadius(8)
-                                } else {
-                                    Color
-                                        .secondary
+                        ForEach(response.results) { mediaItem in
+                            if let title = mediaItem.title ?? mediaItem.name {
+                                NavigationLink(destination: MovieView(id: mediaItem.id ?? 0)) {
+                                    if let imageURL = mediaItem.posterURL {
+                                        AsyncImage(url: imageURL) { image in
+                                            image.resizable()
+                                        } placeholder: {
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .foregroundStyle(Material.ultraThin)
+                                                        .frame(width: 100, height: 150)
+                                                    Text(title)
+                                                        .foregroundStyle(Color.secondary)
+                                                        .font(.headline)
+                                                        .bold()
+                                                        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                                                        .padding()
+                                                        .frame(width: 100, height: 150)
+                                                }
+                                        }
                                         .frame(width: 100, height: 150)
                                         .cornerRadius(8)
+                                    } else {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .foregroundStyle(Material.ultraThin)
+                                                .frame(width: 100, height: 150)
+                                            Text(title)
+                                                .foregroundStyle(Color.secondary)
+                                                .font(.headline)
+                                                .bold()
+                                                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                                                .padding()
+                                                .frame(width: 100, height: 150)
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -6,36 +6,38 @@
 //
 
 import Foundation
+import Combine
 
 class SearchViewModel: ObservableObject {
-    @Published var searchResults: [SearchType: SearchResponse] = [:]
-    @Published var searchTypes: [SearchType] = [.movie, .tvShow, .collection]
+    
+    @Published var searchResults: [String: SearchResponse] = [:]
+    
+    private var cancellables = Set<AnyCancellable>()
+    private let dataProvider = DataProvider.shared
+    
+    func search(query: String, searchTypes: [SearchType]) {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
 
-    let network = Network.shared
+        if query.isEmpty {
+            searchResults = [:]
+            return
+        }
 
-    func search(query: String) {
         searchTypes.forEach { searchType in
-            var components = URLComponents(string: searchType.endpoint.urlPath)!
-            components.addQueryItem("query", query)
-            for (key, value) in searchType.endpoint.parameters {
-                components.addQueryItem(key, value)
-            }
-
-            guard let url = components.url else {
-                print("Invalid URL for searchType \(searchType.rawValue)")
-                return
-            }
-
-            network.request(url: url, headers: searchType.endpoint.headers) { (result: Result<SearchResponse, Error>) in
-                switch result {
-                case .success(let response):
-                    DispatchQueue.main.async {
-                        self.searchResults[searchType] = response
+            dataProvider.search(query: query, for: searchType)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("Error searching for \(searchType.description): \(error.localizedDescription)")
                     }
-                case .failure(let error):
-                    print("Error searching for \(searchType.rawValue): \(error.localizedDescription)")
-                }
-            }
+                }, receiveValue: { response in
+                    self.searchResults[searchType.description] = response
+                })
+                .store(in: &cancellables)
         }
     }
 }
