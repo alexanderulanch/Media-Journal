@@ -9,23 +9,17 @@ import SwiftUI
 import ColorKit
 
 struct MovieView: View {
-    @ObservedObject var vm: MovieViewModel
-    @State private var isLoading = true
+    @ObservedObject var vm = MovieViewModel()
     
     let id: Int
     
-    init(id: Int) {
-        self.id = id
-        self.vm = MovieViewModel(movieId: id)
-    }
-    
     var body: some View {
         ScrollView(showsIndicators: false) {
-            if vm.movie != nil {
+            if let movie = vm.movie {
                 VStack(alignment: .leading) {
                     MovieHeaderView(vm)
                     Group {
-                        if let videos = vm.youtubeVideos, !videos.isEmpty {
+                        if let videos = movie.videos, !videos.isEmpty {
                             Text("Videos")
                                 .font(.title2)
                                 .bold()
@@ -35,6 +29,10 @@ struct MovieView: View {
                     .padding(.horizontal)
                 }
             }
+        }
+        .safeAreaPadding(.vertical)
+        .onAppear {
+            vm.getMovie(id)
         }
     }
 }

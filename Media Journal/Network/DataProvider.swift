@@ -17,7 +17,7 @@ class DataProvider {
     
     private init() {}
     
-    func fetchMovieDetails(id: Int) -> AnyPublisher<(Movie, [YoutubeVideo]), Error> {
+    func fetchMovieDetails(id: Int) -> AnyPublisher<Movie, Error> {
         let (detailsModel,
              creditsModel,
              releaseDatesModel,
@@ -38,18 +38,8 @@ class DataProvider {
                 Network.shared.request(with: releaseDatesModel),
                 Network.shared.request(with: videosModel)
             )
-            .flatMap { (credits: Credits, details: MovieDetails, releaseDates: ReleaseDateResponse, videos: VideoResponse) -> AnyPublisher<(Movie, [YoutubeVideo]), Error> in
-                let movie = Movie(id: id, credits: credits, details: details, releaseDates: releaseDates.results, videos: videos.results)
-                
-                let youtubeKeys = movie.videos?.filter { $0.site == "YouTube" }.map { $0.key } ?? []
-                let videoPublishers = youtubeKeys.map { self.fetchYoutubeVideo(from: $0) }
-                
-                return Publishers.MergeMany(videoPublishers)
-                    .collect()
-                    .map { videos -> (Movie, [YoutubeVideo]) in
-                        return (movie, videos.flatMap { $0.items })
-                    }
-                    .eraseToAnyPublisher()
+            .map { (credits: Credits, details: MovieDetails, releaseDates: ReleaseDateResponse, videos: VideoResponse) -> Movie in
+                Movie(id: id, credits: credits, details: details, releaseDates: releaseDates.results, videos: videos.results)
             }
             .eraseToAnyPublisher()
     }

@@ -11,7 +11,8 @@ import Combine
 
 class MovieViewModel: ObservableObject {
     
-    @Published var movie: Movie? = nil {
+    @Published var movie: Movie? = nil
+    {
         didSet {
             if let backdropURL = movie?.details?.backdropURL {
                 loadImage(forKey: "backdrop", from: backdropURL)
@@ -23,14 +24,9 @@ class MovieViewModel: ObservableObject {
         }
     }
     @Published var images: [String: UIImage?] = [:]
-    @Published var youtubeVideos: [YoutubeVideo]? = []
     
     private var cancellables = Set<AnyCancellable>()
     private let dataProvider = DataProvider.shared
-    
-    init(movieId: Int) {
-        getMovie(movieId)
-    }
     
     func getMovie(_ id: Int) {
         dataProvider.fetchMovieDetails(id: id)
@@ -42,9 +38,8 @@ class MovieViewModel: ObservableObject {
                 case .failure(let error):
                     print("Error fetching movie details: \(error.localizedDescription)")
                 }
-            }, receiveValue: { (movie, youtubeVideos) in
+            }, receiveValue: { movie in
                 self.movie = movie
-                self.youtubeVideos = youtubeVideos
             })
             .store(in: &cancellables)
     }

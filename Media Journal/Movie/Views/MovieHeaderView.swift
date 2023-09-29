@@ -71,7 +71,7 @@ struct MovieHeaderView: View {
                                 .clipped()
                                 .offset(y: minY > 0 ? -minY : 0)
                         })
-                        fadingOverlay
+//                        fadingOverlay
                     }
                     .frame(height: initialHeight)
                 }
@@ -273,7 +273,5 @@ struct MovieHeaderView: View {
 }
 
 #Preview {
-    ScrollView {
-        MovieHeaderView(MovieViewModel(movieId: 872585))
-    }
+    MovieView(id: 20760)
 }
